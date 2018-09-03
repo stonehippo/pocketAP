@@ -17,6 +17,7 @@
 // Hardcode default AP settings
 #define AP_DEFAULT_NAME         "pocketAP"
 #define AP_DEFAULT_PASSWORD     "secure_this_ap"
+#define AP_DEFAULT_MDNS         "pocketAP"
 
 /**
  * Helper function to clear out a specific field stored in the EEPROM.
@@ -80,6 +81,13 @@ void startAP() {
 }
 
 /**
+ * Fire up mDNS advertising of the router
+ */
+void mDNSAdvertise() {
+    MDNS.begin(AP_DEFAULT_MDNS);
+}
+
+/**
  * Ardunio lifecycle
  * 
  * Keep the setup and loop as simple as possible. Most of the work should get wrapped up
@@ -93,6 +101,7 @@ void setup() {
         setAPProperties(AP_DEFAULT_NAME, AP_DEFAULT_PASSWORD);
     }
     startAP();
+    mDNSAdvertise();
 }
 
 void loop() {
