@@ -12,9 +12,9 @@
 #include "main.h"
 #include "ssl.h"
 
-// Max size for AP SSID name or password is 32 chars (EEPROM allocations 33 bytes for end of string char)
-#define NAME_FIELD_START        0
-#define NAME_FIELD_END          32
+// Max size for AP SSID or password is 32 chars (EEPROM allocations 33 bytes for end of string char)
+#define SSID_FIELD_START        0
+#define SSID_FIELD_END          32
 #define PASSWORD_FIELD_START    33
 #define PASSWORD_FIELD_END      65
 
@@ -47,8 +47,8 @@ void readField(char *value, int start, int end) {
 /**
  * store the AP name in EEPROM
  */
-void setAPName(const char *name) {
-    writeField(name, NAME_FIELD_START, NAME_FIELD_END);
+void setAPName(const char *ssid) {
+    writeField(ssid, SSID_FIELD_START, SSID_FIELD_END);
 }
 
 /**
@@ -61,12 +61,12 @@ void setAPPassword(const char *password) {
 /**
  * Helper to set the full config in one shot
  */
-void setAPProperties(const char *name, const char *password) {
-    setAPName(name);
+void setAPProperties(const char *ssid, const char *password) {
+    setAPName(ssid);
     setAPPassword(password);
 }
 
-void getAPProperties(char *name, char *password) {
+void getAPProperties(char *ssid, char *password) {
     
 }
 
@@ -81,9 +81,9 @@ boolean isAPConfigured() {
  * Start up the AP with the name and password stored in the EEPROM
  */
 void startAP() {
-    char *name;
+    char *ssid;
     char *password;
-    getAPProperties(name, password);
+    getAPProperties(ssid, password);
     WiFi.softAP(AP_DEFAULT_NAME, AP_DEFAULT_PASSWORD);
 }
 
