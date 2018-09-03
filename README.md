@@ -40,6 +40,6 @@ I was able to pull together most of the hardware and firmware is a few hours of 
 
 ## License
 
-Puck is copyright (c) 2018 George White <stonehippo@gmail.com>.
+pocketAP is copyright (c) 2018 George White <stonehippo@gmail.com>.
 
 This code is licensed under GPL v3. License is available [here](/LICENSE).
