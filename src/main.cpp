@@ -5,8 +5,12 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266mDNS.h>
+#include <ESP8266WebServerSecure.h>
 
 #include "main.h"
+#include "ssl.h"
 
 // Max size for AP SSID name or password is 32 chars (EEPROM allocations 33 bytes for end of string char)
 #define NAME_FIELD_START        0
@@ -18,6 +22,9 @@
 #define AP_DEFAULT_NAME         "pocketAP"
 #define AP_DEFAULT_PASSWORD     "secure_this_ap"
 #define AP_DEFAULT_MDNS         "pocketAP"
+
+// Secure Web server for config
+ESP8266WebServerSecure server(443);
 
 /**
  * Helper function to clear out a specific field stored in the EEPROM.
@@ -88,6 +95,40 @@ void mDNSAdvertise() {
 }
 
 /**
+ * HTTP 200/OK for path "/" (root)
+ */
+void handleRoot() {
+    String response = "<html><body><h1>Welcome to PocketAP</h1></body></html>";
+    server.send(200, "text/html", response);
+}
+
+/**
+ * HTTP 200/Ok for path "/setConfing"
+ */
+void handleSetConfig() {
+
+}
+
+/**
+ * HTTP 404/Not Found handler
+ */
+void handleNotFound() {
+    String response = "<html><body><h1>Invalid URL</h1></body></html>";
+    server.send(404, "text/html", response);
+}
+
+/**
+ * Set up the secure Web server for config
+ */
+void startServer() {
+    server.setServerKeyAndCert_P(rsakey, sizeof(rsakey), x509, sizeof(x509));
+    server.on("/", handleRoot);
+    server.on("/setConfig", HTTP_POST, handleSetConfig);
+    server.onNotFound(handleNotFound);
+    server.begin();
+}
+
+/**
  * Ardunio lifecycle
  * 
  * Keep the setup and loop as simple as possible. Most of the work should get wrapped up
@@ -102,8 +143,9 @@ void setup() {
     }
     startAP();
     mDNSAdvertise();
+    startServer();
 }
 
 void loop() {
-    
+    server.handleClient();
 }

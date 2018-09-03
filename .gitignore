@@ -5,3 +5,7 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .DS_Store
+
+ssl.h
+tools/key.h
+tools/x509.h
