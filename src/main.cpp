@@ -103,7 +103,7 @@ void handleRoot() {
 }
 
 /**
- * HTTP 200/Ok for path "/setConfing"
+ * HTTP 200/OK for path "/setConfig"
  */
 void handleSetConfig() {
 
